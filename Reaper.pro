@@ -6,12 +6,14 @@ CONFIG += c++11
 
 SOURCES += main.cpp \
     peak.cpp \
-    scan.cpp
+    scan.cpp \
+    msrun.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
 
 HEADERS += \
     peak.h \
-    scan.h
+    scan.h \
+    msrun.h
 
