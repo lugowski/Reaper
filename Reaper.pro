@@ -5,11 +5,13 @@ CONFIG -= qt
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    peak.cpp
+    peak.cpp \
+    scan.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
 
 HEADERS += \
-    peak.h
+    peak.h \
+    scan.h
 
