@@ -7,7 +7,8 @@ CONFIG += c++11
 SOURCES += main.cpp \
     peak.cpp \
     scan.cpp \
-    msrun.cpp
+    msrun.cpp \
+    base64.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
@@ -15,5 +16,6 @@ qtcAddDeployment()
 HEADERS += \
     peak.h \
     scan.h \
-    msrun.h
+    msrun.h \
+    base64.h
 
