@@ -7,7 +7,6 @@ SOURCES += main.cpp \
     peak.cpp \
     scan.cpp \
     msrun.cpp \
-    base64.cpp \
     mzxml_reader.cpp
 
 include(deployment.pri)
@@ -17,7 +16,6 @@ HEADERS += \
     peak.h \
     scan.h \
     msrun.h \
-    base64.h \
     mzxml_reader.h
 
 QT += core
