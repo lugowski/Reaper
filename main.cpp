@@ -1,10 +1,14 @@
 #include <iostream>
+#include <string>
 
-using namespace std;
+#include "msrun.h"
+#include "mzxml_reader.h"
 
-int main()
+int main(int argc, char *argv[])
 {
-    cout << "Hello World!" << endl;
+    std::cout << argv[1] << " " << argc << std::endl;
+    MzXML_Reader mzxml{argv[1]};
+    MSRun ms{ mzxml.read_mzxml() };
+
     return 0;
 }
-

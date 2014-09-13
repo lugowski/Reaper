@@ -1,7 +1,7 @@
 #include "peak.h"
 
 bool valid( const Peak &p) {
-    return ( p.get_mz() > 0 && p.get_intensity() > 0 );
+    return ( p.get_mz() >= 0 && p.get_intensity() >= 0 );
 }
 
 Peak::Peak(double mz, double intensity)
