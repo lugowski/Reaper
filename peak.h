@@ -7,7 +7,7 @@
 class PeakException : std::runtime_error
 {
 public:
-    PeakException(std::string const& error)
+    PeakException(const std::string& error)
         :std::runtime_error(error)
     {}
 };
@@ -15,12 +15,13 @@ public:
 class Peak
 {
 public:
+    Peak(){};
     Peak(double mz, double intensity);
     double get_mz() const;
     double get_intensity() const;
 private:
-    const double mz;
-    const double intensity;
+    double mz{};
+    double intensity{};
 };
 
 #endif // PEAK_H

@@ -3,12 +3,12 @@
 
 #include <stdexcept>
 #include <string>
+#include <map>
 
 #include <QFile>
 #include <QXmlStreamReader>
 #include <QString>
 #include <QDataStream>
-
 
 #include "scan.h"
 #include "msrun.h"
@@ -16,7 +16,7 @@
 class MzXMLException : std::runtime_error
 {
 public:
-    MzXMLException(std::string const& error)
+    MzXMLException(const std::string& error)
         :std::runtime_error(error)
     {}
 };

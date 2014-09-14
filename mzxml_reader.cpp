@@ -14,6 +14,15 @@ double extract_time( const QString& s )
     }
 }
 
+void read_peaks( QDataStream& data, Scan& scan, unsigned num_peaks )
+{
+    for(unsigned i=0; (i<num_peaks) && (data.status() == QDataStream::Ok); ++i) {
+        double mz{}, intensity{};
+        data >> mz >> intensity;
+        scan.add_peak({mz, intensity});
+    }
+}
+
 void MzXML_Reader::parse_peaks( Scan &scan, unsigned num_peaks )
 {
     while (xml.qualifiedName().compare(PEAKS)!=0 || !xml.isEndElement() )
@@ -32,7 +41,7 @@ void MzXML_Reader::parse_peaks( Scan &scan, unsigned num_peaks )
         QDataStream data{ QByteArray::fromBase64(xml.text().toLocal8Bit()) };
         data.setFloatingPointPrecision(precision);
         data.setByteOrder(byte_order);
-        scan.read_peaks(data, num_peaks);
+        read_peaks(data, scan, num_peaks);
     }
 }
 
@@ -81,5 +90,5 @@ const QString MzXML_Reader::PRECISION{"precision"};
 const QString MzXML_Reader::BYTEORDER{"byteOrder"};
 const QString MzXML_Reader::PEAKS_COUNT{"peaksCount"};
 const QString MzXML_Reader::INDEX{"num"};
-const QString MzXML_Reader::MSLEVEL{"num"};
+const QString MzXML_Reader::MSLEVEL{"msLevel"};
 const QString MzXML_Reader::RETENTION{"retentionTime"};
