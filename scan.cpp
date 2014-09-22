@@ -1,9 +1,7 @@
 #include "scan.h"
 
-#include <iostream>
 #include <algorithm>
-#include <map>
-#include <utility>
+
 
 Scan::Scan(unsigned index, unsigned msLevel, double retention)
     :index{index}, msLevel{msLevel}, retention{retention}
@@ -44,6 +42,11 @@ void Scan::centroid()
         if ( ( (p-1)->get_intensity() < p->get_intensity() ) &&
              ( (p+1)->get_intensity() < p->get_intensity() ) ) {
 
+            if ( ( (p-1)->get_intensity() == 0 ) &&
+                   ( (p+1)->get_intensity() == 0 ) ) {
+                continue; // skip single peaks
+            }
+
             double mz = p->get_mz();
 
             // find low corner
@@ -61,6 +64,9 @@ void Scan::centroid()
             // determine triangle area
             double base = h->get_mz() - l->get_mz();
             double intensity = 0.5 * base * p->get_intensity();
+            if ( intensity < 0 ) {
+                continue; // for ab sciex
+            }
             //std::cout << mz << "\t" << intensity << std::endl;
             centroided.push_back( {mz, intensity} );
         }
@@ -74,18 +80,18 @@ double ppm_error( double x, double y )
     return 1E6 * (x-y) / x;
 }
 
-double score( Peak x, Peak y) {
+double score( const Peak& x, const Peak& y) {
     double error = std::abs(ppm_error(x.get_mz(), y.get_mz()));
 
     return ((25-error)/25);
 }
 
-void Scan::align( Scan other, std::map<unsigned, std::vector<std::pair<Peak, Peak>>>& aligned ) const
+void Scan::align( Scan other, Alignment& alignment ) const
 {
     std::vector<std::vector<double>> map(num_peaks(), std::vector<double>(other.num_peaks(), 0));
     for (unsigned i{}; i<num_peaks(); ++i) {
         for (unsigned j{}; (j<other.num_peaks()) && ( ppm_error(other.peaks[j].get_mz(), peaks[i].get_mz()) < 25); ++j) {
-            if( ppm_error(peaks[i].get_mz(), other.peaks[j].get_mz()) > 25 ) {
+            if( ppm_error(peaks[i].get_mz(), other.peaks[j].get_mz()) > 10 ) {
                 continue;
             }
             else {
@@ -111,8 +117,14 @@ void Scan::align( Scan other, std::map<unsigned, std::vector<std::pair<Peak, Pea
         auto max = std::max_element(map[i].begin(), map[i].end()-j);
         if (*max) {
             j = std::distance(max, map[i].end()) ;
-            aligned[index].push_back( std::pair<Peak, Peak>{peaks[i], other.peaks[std::distance(map[i].begin(), max)]} );
+            //alignment[retention].push_back( std::pair<Peak, Peak>{peaks[i], other.peaks[std::distance(map[i].begin(), max)]} );
+            //double m1 {peaks[i].get_mz()};
+            //double m2 { other.peaks[std::distance(map[i].begin(), max)].get_mz() };
+
+            //mz_map[m1] = m2;
+            //alignment[retention] = mz_map;
             //std::cout << msLevel << "\t" << i << "\t" << peaks[i].get_mz() << "\t" << std::distance(map[i].begin(), max) << "\t" << other.peaks[std::distance(map[i].begin(), max)].get_mz() << std::endl;
+            alignment.insert({retention, peaks[i]}, {other.retention, other.peaks[std::distance(map[i].begin(), max)]});
         }
     }
 }

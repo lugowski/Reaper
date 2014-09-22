@@ -15,7 +15,7 @@ public:
 class Peak
 {
 public:
-    Peak(){};
+    Peak(){}
     Peak(double mz, double intensity);
     double get_mz() const;
     double get_intensity() const;
@@ -23,5 +23,8 @@ private:
     double mz{};
     double intensity{};
 };
+
+bool operator==(Peak& p1, Peak& p2);
+bool operator!=(Peak& p1, Peak& p2);
 
 #endif // PEAK_H

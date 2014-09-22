@@ -2,12 +2,12 @@
 #define SCAN_H
 
 #include <vector>
-#include <stdexcept>
+#include <map>
 #include <ostream>
-
-#include <QDataStream>
+#include <stdexcept>
 
 #include "peak.h"
+#include "alignment.h"
 
 class ScanException : public std::runtime_error
 {
@@ -26,7 +26,7 @@ public:
     unsigned get_msLevel() const;
     unsigned get_index() const;
     void centroid();
-    void align( Scan other, std::map<unsigned, std::vector<std::pair<Peak, Peak>>>& aligned ) const;
+    void align( Scan other, Alignment& alignment ) const;
     friend std::ostream& operator<<(std::ostream& os, const Scan& scan);
 private:
     unsigned index;

@@ -22,3 +22,14 @@ inline double Peak::get_intensity() const
 {
     return intensity;
 }
+
+bool operator==(Peak& p1, Peak& p2)
+{
+    return ( p1.get_mz() == p2.get_mz() )
+            && ( p1.get_intensity() == p2.get_intensity() );
+}
+
+bool operator!=(Peak& p1, Peak& p2)
+{
+    return !(p1 == p2);
+}

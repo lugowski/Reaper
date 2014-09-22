@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 #include <stdexcept>
 
 #include "scan.h"
@@ -22,7 +23,7 @@ public:
     void add_scan( Scan scan );
     void centroid( unsigned level );
     void print_scan( unsigned scan );
-    std::map<unsigned, std::vector<std::pair<Peak, Peak>>> align( unsigned level );
+    Alignment align( unsigned level );
 private:
     std::vector<Scan> scans{};
 };

@@ -30,9 +30,9 @@ void MSRun::print_scan( unsigned scan )
     }
 }
 
-std::map<unsigned, std::vector<std::pair<Peak, Peak>>> MSRun::align( unsigned level )
+Alignment MSRun::align( unsigned level )
 {
-    std::map<unsigned, std::vector<std::pair<Peak, Peak>>> aligned{};
+    Alignment alignment{};
     // find last spectra of desired ms level
     auto last = scans.cend();
     while ( ( last != scans.cbegin() ) && (last->get_msLevel() != level) ) {
@@ -44,12 +44,14 @@ std::map<unsigned, std::vector<std::pair<Peak, Peak>>> MSRun::align( unsigned le
         if (scan->get_msLevel() != level) {
             continue;
         }
+        if (scan->get_index() < 1000) { continue; };
+        if (scan->get_index() > 1250) { break; };
         // find the adjacent same level spectra
         auto next = scan+1;
         while ( ( next != last ) && (next->get_msLevel() != level) ) {
             ++next;
         }
-        scan->align( *next, aligned );
+        scan->align( *next, alignment );
     }
-    return aligned;
+    return alignment;
 }
